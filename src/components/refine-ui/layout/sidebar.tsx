@@ -77,10 +77,7 @@ export function Sidebar() {
           "gap-1.5",
           "pt-4",
           "pb-2",
-          {
-            "px-3": open,
-            "px-3": !open, // Mesmo padding quando fechado para centralizar melhor
-          }
+          "px-3"
         )}
       >
         {menuItems.map((item: TreeMenuItem) => (
