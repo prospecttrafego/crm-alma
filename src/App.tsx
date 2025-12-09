@@ -34,6 +34,7 @@ import { ContactList, ContactShow, ContactCreate, ContactEdit } from "./pages/co
 import { CompanyList, CompanyShow, CompanyCreate, CompanyEdit } from "./pages/companies";
 import { TaskList, TaskCreate, TaskEdit } from "./pages/tasks";
 import { Settings } from "./pages/settings";
+import { Onboarding } from "./pages/onboarding";
 
 import { supabaseClient } from "./utility";
 
@@ -224,6 +225,7 @@ function App() {
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
+                  <Route path="/onboarding" element={<Onboarding />} />
                 </Route>
               </Routes>
 

@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { useList, useNavigation, useDelete } from "@refinedev/core";
+import { useNavigation } from "@refinedev/core";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,10 +34,11 @@ import {
   Pencil,
   Trash2,
   Mail,
-  Phone,
   Building2,
   Filter,
 } from "lucide-react";
+import { TableSkeleton } from "@/components/alma/skeletons";
+import { EmptyState } from "@/components/alma/empty-state";
 
 // Tipos
 interface Contact {
@@ -235,12 +236,20 @@ export function ContactList() {
 
       {/* Empty State */}
       {filteredContacts.length === 0 && (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">Nenhum contato encontrado</p>
-          <Button variant="link" onClick={() => create("contacts")}>
-            Criar primeiro contato
-          </Button>
-        </div>
+        <EmptyState
+          variant={searchQuery || statusFilter !== "all" ? "search" : "contacts"}
+          title={searchQuery || statusFilter !== "all" ? "Nenhum contato encontrado" : undefined}
+          description={searchQuery || statusFilter !== "all" ? "Tente ajustar os filtros ou buscar por outros termos." : undefined}
+          actionLabel={searchQuery || statusFilter !== "all" ? "Limpar Filtros" : "Adicionar Contato"}
+          onAction={() => {
+            if (searchQuery || statusFilter !== "all") {
+              setSearchQuery("");
+              setStatusFilter("all");
+            } else {
+              create("contacts");
+            }
+          }}
+        />
       )}
     </div>
   );

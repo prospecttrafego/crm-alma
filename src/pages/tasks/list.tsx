@@ -3,7 +3,6 @@ import { useNavigation } from "@refinedev/core";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -28,8 +27,8 @@ import {
   Calendar,
   User,
   Target,
-  Filter,
 } from "lucide-react";
+import { EmptyState } from "@/components/alma/empty-state";
 
 interface Task {
   id: string;
@@ -146,6 +145,25 @@ export function TaskList() {
         </Select>
       </div>
 
+      {/* Empty State */}
+      {filteredTasks.length === 0 && (
+        <EmptyState
+          variant={searchQuery || statusFilter !== "all" || priorityFilter !== "all" ? "search" : "tasks"}
+          title={searchQuery || statusFilter !== "all" || priorityFilter !== "all" ? "Nenhuma tarefa encontrada" : undefined}
+          actionLabel={searchQuery || statusFilter !== "all" || priorityFilter !== "all" ? "Limpar Filtros" : "Criar Tarefa"}
+          onAction={() => {
+            if (searchQuery || statusFilter !== "all" || priorityFilter !== "all") {
+              setSearchQuery("");
+              setStatusFilter("all");
+              setPriorityFilter("all");
+            } else {
+              create("tasks");
+            }
+          }}
+        />
+      )}
+
+      {filteredTasks.length > 0 && (
       <div className="space-y-6">
         {/* A Fazer */}
         {todoTasks.length > 0 && (
@@ -213,6 +231,7 @@ export function TaskList() {
           </div>
         )}
       </div>
+      )}
     </div>
   );
 }

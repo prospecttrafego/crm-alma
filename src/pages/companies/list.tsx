@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import { useNavigation } from "@refinedev/core";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -29,6 +28,8 @@ import {
   Globe,
   Users,
 } from "lucide-react";
+import { TableSkeleton } from "@/components/alma/skeletons";
+import { EmptyState } from "@/components/alma/empty-state";
 
 interface Company {
   id: string;
@@ -84,87 +85,104 @@ export function CompanyList() {
         />
       </div>
 
-      <div className="border rounded-lg">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Empresa</TableHead>
-              <TableHead>Indústria</TableHead>
-              <TableHead>Tamanho</TableHead>
-              <TableHead>Contatos</TableHead>
-              <TableHead>Deals</TableHead>
-              <TableHead>Valor Total</TableHead>
-              <TableHead className="w-[50px]"></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {filteredCompanies.map((company) => (
-              <TableRow key={company.id} className="cursor-pointer hover:bg-muted/50">
-                <TableCell>
-                  <div className="flex items-center gap-3">
-                    <Avatar className="h-9 w-9">
-                      <AvatarFallback className="bg-primary/10 text-primary text-sm">
-                        {company.name.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="font-medium">{company.name}</p>
-                      {company.website && (
-                        <a
-                          href={company.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1"
-                        >
-                          <Globe className="h-3 w-3" />
-                          {company.domain}
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell>{company.industry || "-"}</TableCell>
-                <TableCell>
-                  <Badge variant="outline">{company.size || "-"}</Badge>
-                </TableCell>
-                <TableCell>
-                  <div className="flex items-center gap-1">
-                    <Users className="h-4 w-4 text-muted-foreground" />
-                    {company.contacts_count}
-                  </div>
-                </TableCell>
-                <TableCell>{company.deals_count}</TableCell>
-                <TableCell className="font-medium text-primary">
-                  R$ {company.total_value.toLocaleString("pt-BR")}
-                </TableCell>
-                <TableCell>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-8 w-8">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => show("companies", company.id)}>
-                        <Eye className="h-4 w-4 mr-2" />
-                        Ver detalhes
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => edit("companies", company.id)}>
-                        <Pencil className="h-4 w-4 mr-2" />
-                        Editar
-                      </DropdownMenuItem>
-                      <DropdownMenuItem className="text-destructive">
-                        <Trash2 className="h-4 w-4 mr-2" />
-                        Excluir
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </TableCell>
+      {/* Table */}
+      {filteredCompanies.length > 0 ? (
+        <div className="border rounded-lg">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Empresa</TableHead>
+                <TableHead>Indústria</TableHead>
+                <TableHead>Tamanho</TableHead>
+                <TableHead>Contatos</TableHead>
+                <TableHead>Deals</TableHead>
+                <TableHead>Valor Total</TableHead>
+                <TableHead className="w-[50px]"></TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+            </TableHeader>
+            <TableBody>
+              {filteredCompanies.map((company) => (
+                <TableRow key={company.id} className="cursor-pointer hover:bg-muted/50">
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <Avatar className="h-9 w-9">
+                        <AvatarFallback className="bg-primary/10 text-primary text-sm">
+                          {company.name.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-medium">{company.name}</p>
+                        {company.website && (
+                          <a
+                            href={company.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1"
+                          >
+                            <Globe className="h-3 w-3" />
+                            {company.domain}
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>{company.industry || "-"}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline">{company.size || "-"}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1">
+                      <Users className="h-4 w-4 text-muted-foreground" />
+                      {company.contacts_count}
+                    </div>
+                  </TableCell>
+                  <TableCell>{company.deals_count}</TableCell>
+                  <TableCell className="font-medium text-primary">
+                    R$ {company.total_value.toLocaleString("pt-BR")}
+                  </TableCell>
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => show("companies", company.id)}>
+                          <Eye className="h-4 w-4 mr-2" />
+                          Ver detalhes
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => edit("companies", company.id)}>
+                          <Pencil className="h-4 w-4 mr-2" />
+                          Editar
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="text-destructive">
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Excluir
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      ) : (
+        <EmptyState
+          variant={searchQuery ? "search" : "companies"}
+          title={searchQuery ? "Nenhuma empresa encontrada" : undefined}
+          description={searchQuery ? "Tente buscar por outros termos." : undefined}
+          actionLabel={searchQuery ? "Limpar Busca" : "Adicionar Empresa"}
+          onAction={() => {
+            if (searchQuery) {
+              setSearchQuery("");
+            } else {
+              create("companies");
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -14,6 +14,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   Sidebar as ShadcnSidebar,
   SidebarContent as ShadcnSidebarContent,
   SidebarFooter as ShadcnSidebarFooter,
@@ -418,7 +423,7 @@ function SidebarButton({
     </>
   );
 
-  return (
+  const button = (
     <Button
       asChild={!!(asLink && item.route)}
       variant="ghost"
@@ -427,10 +432,10 @@ function SidebarButton({
         "flex w-full items-center gap-3 py-2 text-sm",
         "transition-all duration-200",
         "rounded-lg",
-        "min-h-[44px]", // Altura mínima para melhor toque
+        "min-h-[44px]",
         {
           "px-3 justify-start": open,
-          "px-0 justify-center": !open, // Centralizar quando fechado
+          "px-0 justify-center": !open,
           "bg-primary hover:bg-primary/90": isSelected,
           "text-primary-foreground": isSelected,
           "hover:bg-sidebar-accent": !isSelected,
@@ -452,6 +457,22 @@ function SidebarButton({
       )}
     </Button>
   );
+
+  // Mostrar tooltip quando sidebar está fechado
+  if (!open) {
+    return (
+      <Tooltip delayDuration={0}>
+        <TooltipTrigger asChild>
+          {button}
+        </TooltipTrigger>
+        <TooltipContent side="right" className="font-medium">
+          {getDisplayName(item)}
+        </TooltipContent>
+      </Tooltip>
+    );
+  }
+
+  return button;
 }
 
 Sidebar.displayName = "Sidebar";
