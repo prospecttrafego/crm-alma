@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "incremental": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
     "target": "ES2020",
     "useDefineForClassFields": true,
@@ -15,7 +16,6 @@
     "noUnusedLocals": false,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
