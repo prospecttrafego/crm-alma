@@ -489,6 +489,8 @@ function DealDetailPanel({ deal, stages }: DealDetailPanelProps) {
   const contactName = deal.contact
     ? `${deal.contact.first_name} ${deal.contact.last_name || ""}`.trim()
     : "Sem contato";
+  
+  const currentStage = stages.find(s => s.id === deal.stage_id);
 
   return (
     <div className="mt-6">
@@ -500,6 +502,20 @@ function DealDetailPanel({ deal, stages }: DealDetailPanelProps) {
         </TabsList>
 
         <TabsContent value="details" className="space-y-6 mt-4">
+          {/* Stage Progress */}
+          {currentStage && (
+            <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50">
+              <div 
+                className="h-3 w-3 rounded-full" 
+                style={{ backgroundColor: currentStage.color }}
+              />
+              <span className="text-sm font-medium">{currentStage.name}</span>
+              <span className="text-xs text-muted-foreground">
+                ({currentStage.probability}% probabilidade)
+              </span>
+            </div>
+          )}
+
           {/* Value & Probability */}
           <div className="grid grid-cols-2 gap-4">
             <Card className="border-primary/20">
