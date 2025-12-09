@@ -1,13 +1,28 @@
 import { AuthProvider } from "@refinedev/core";
 import { supabaseClient } from "./utility";
 
+// Tipos para o usuário autenticado
+export interface UserIdentity {
+  id: string;
+  email: string;
+  name: string;
+  avatar?: string;
+  role?: string;
+  organizationId?: string;
+  organizationName?: string;
+  organizationSlug?: string;
+}
+
 const authProvider: AuthProvider = {
   login: async ({ email, password, providerName }) => {
-    // sign in with oauth
     try {
+      // Login com OAuth (Google, GitHub, etc)
       if (providerName) {
         const { data, error } = await supabaseClient.auth.signInWithOAuth({
           provider: providerName,
+          options: {
+            redirectTo: `${window.location.origin}/`,
+          },
         });
 
         if (error) {
@@ -25,7 +40,7 @@ const authProvider: AuthProvider = {
         }
       }
 
-      // sign in with email and password
+      // Login com email e senha
       const { data, error } = await supabaseClient.auth.signInWithPassword({
         email,
         password,
@@ -44,26 +59,32 @@ const authProvider: AuthProvider = {
           redirectTo: "/",
         };
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error,
+        error: error as Error,
       };
     }
 
     return {
       success: false,
       error: {
-        message: "Login failed",
-        name: "Invalid email or password",
+        message: "Falha no login",
+        name: "Email ou senha inválidos",
       },
     };
   },
-  register: async ({ email, password }) => {
+
+  register: async ({ email, password, fullName, organizationName }) => {
     try {
       const { data, error } = await supabaseClient.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            full_name: fullName || email.split("@")[0],
+          },
+        },
       });
 
       if (error) {
@@ -73,27 +94,38 @@ const authProvider: AuthProvider = {
         };
       }
 
-      if (data) {
+      if (data?.user) {
+        // Se forneceu nome da organização, criar organização após confirmação do email
+        // A criação da organização será feita no primeiro acesso
+        if (organizationName) {
+          localStorage.setItem("pending_organization", organizationName);
+        }
+
         return {
           success: true,
-          redirectTo: "/",
+          redirectTo: "/login",
+          successNotification: {
+            message: "Conta criada com sucesso!",
+            description: "Verifique seu email para confirmar o cadastro.",
+          },
         };
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error,
+        error: error as Error,
       };
     }
 
     return {
       success: false,
       error: {
-        message: "Register failed",
-        name: "Invalid email or password",
+        message: "Falha no cadastro",
+        name: "Não foi possível criar a conta",
       },
     };
   },
+
   forgotPassword: async ({ email }) => {
     try {
       const { data, error } = await supabaseClient.auth.resetPasswordForEmail(
@@ -113,23 +145,28 @@ const authProvider: AuthProvider = {
       if (data) {
         return {
           success: true,
+          successNotification: {
+            message: "Email enviado!",
+            description: "Verifique sua caixa de entrada para redefinir a senha.",
+          },
         };
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error,
+        error: error as Error,
       };
     }
 
     return {
       success: false,
       error: {
-        message: "Forgot password failed",
-        name: "Invalid email",
+        message: "Falha ao enviar email",
+        name: "Email inválido",
       },
     };
   },
+
   updatePassword: async ({ password }) => {
     try {
       const { data, error } = await supabaseClient.auth.updateUser({
@@ -147,22 +184,28 @@ const authProvider: AuthProvider = {
         return {
           success: true,
           redirectTo: "/",
+          successNotification: {
+            message: "Senha atualizada!",
+            description: "Sua senha foi alterada com sucesso.",
+          },
         };
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        error,
+        error: error as Error,
       };
     }
+
     return {
       success: false,
       error: {
-        message: "Update password failed",
-        name: "Invalid password",
+        message: "Falha ao atualizar senha",
+        name: "Senha inválida",
       },
     };
   },
+
   logout: async () => {
     const { error } = await supabaseClient.auth.signOut();
 
@@ -175,13 +218,25 @@ const authProvider: AuthProvider = {
 
     return {
       success: true,
-      redirectTo: "/",
+      redirectTo: "/login",
     };
   },
+
   onError: async (error) => {
-    console.error(error);
+    console.error("Auth error:", error);
+    
+    // Se for erro de autenticação, fazer logout
+    if (error?.status === 401 || error?.message?.includes("JWT")) {
+      return {
+        logout: true,
+        redirectTo: "/login",
+        error,
+      };
+    }
+
     return { error };
   },
+
   check: async () => {
     try {
       const { data } = await supabaseClient.auth.getSession();
@@ -191,49 +246,106 @@ const authProvider: AuthProvider = {
         return {
           authenticated: false,
           error: {
-            message: "Check failed",
-            name: "Session not found",
+            message: "Sessão expirada",
+            name: "Faça login novamente",
           },
           logout: true,
           redirectTo: "/login",
         };
       }
-    } catch (error: any) {
+
+      return {
+        authenticated: true,
+      };
+    } catch (error: unknown) {
       return {
         authenticated: false,
-        error: error || {
-          message: "Check failed",
-          name: "Not authenticated",
+        error: error as Error || {
+          message: "Erro de autenticação",
+          name: "Não autenticado",
         },
         logout: true,
         redirectTo: "/login",
       };
     }
-
-    return {
-      authenticated: true,
-    };
   },
+
   getPermissions: async () => {
-    const user = await supabaseClient.auth.getUser();
+    try {
+      const { data: userData } = await supabaseClient.auth.getUser();
+      
+      if (!userData?.user) {
+        return null;
+      }
 
-    if (user) {
-      return user.data.user?.role;
+      // Buscar role do profile
+      const { data: profile } = await supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq("id", userData.user.id)
+        .single();
+
+      return profile?.role || "sales";
+    } catch {
+      return null;
     }
-
-    return null;
   },
-  getIdentity: async () => {
-    const { data } = await supabaseClient.auth.getUser();
 
-    if (data?.user) {
+  getIdentity: async (): Promise<UserIdentity | null> => {
+    try {
+      const { data: userData } = await supabaseClient.auth.getUser();
+
+      if (!userData?.user) {
+        return null;
+      }
+
+      // Buscar profile com organização
+      const { data: profile } = await supabaseClient
+        .from("profiles")
+        .select(`
+          id,
+          full_name,
+          email,
+          avatar_url,
+          role,
+          organization_id,
+          organizations (
+            id,
+            name,
+            slug
+          )
+        `)
+        .eq("id", userData.user.id)
+        .single();
+
+      if (profile) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const orgData = profile.organizations as any;
+        const org = Array.isArray(orgData) ? orgData[0] : orgData;
+        
+        return {
+          id: profile.id,
+          email: profile.email,
+          name: profile.full_name || profile.email,
+          avatar: profile.avatar_url,
+          role: profile.role,
+          organizationId: profile.organization_id,
+          organizationName: org?.name,
+          organizationSlug: org?.slug,
+        };
+      }
+
+      // Fallback para dados básicos do auth
       return {
-        ...data.user,
-        name: data.user.email,
+        id: userData.user.id,
+        email: userData.user.email || "",
+        name: userData.user.user_metadata?.full_name || userData.user.email || "",
+        avatar: userData.user.user_metadata?.avatar_url,
       };
+    } catch (error) {
+      console.error("Error getting identity:", error);
+      return null;
     }
-
-    return null;
   },
 };
 

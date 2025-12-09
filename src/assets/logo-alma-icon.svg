@@ -1,0 +1,7 @@
+<svg viewBox="0 0 40 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Logo Alma - Ícone (apenas o A estilizado) -->
+  <path d="M0 48L16 0H24L12 48H0Z" fill="currentColor"/>
+  <path d="M24 0L40 48H28L16 0H24Z" fill="currentColor"/>
+  <path d="M20 8L12 32H28L20 8Z" fill="currentColor" fill-opacity="0.3"/>
+</svg>
+

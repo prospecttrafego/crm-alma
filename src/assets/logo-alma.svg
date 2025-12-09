@@ -1,0 +1,24 @@
+<svg viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Logo Alma - Agência Digital -->
+  <g id="alma-logo">
+    <!-- Letra A estilizada com diamante -->
+    <path d="M0 48L16 0H24L12 48H0Z" fill="currentColor"/>
+    <path d="M24 0L40 48H28L16 0H24Z" fill="currentColor"/>
+    <path d="M20 8L12 32H28L20 8Z" fill="currentColor" fill-opacity="0.3"/>
+    
+    <!-- Letra L -->
+    <path d="M44 0H52V40H68V48H44V0Z" fill="currentColor"/>
+    
+    <!-- Letra M -->
+    <path d="M72 48V0H80L92 28L104 0H112V48H104V16L92 44L80 16V48H72Z" fill="currentColor"/>
+    
+    <!-- Letra A final -->
+    <path d="M116 48L132 0H140L156 48H148L144 36H128L124 48H116Z" fill="currentColor"/>
+    <path d="M130 28H142L136 12L130 28Z" fill="currentColor" class="inner"/>
+    
+    <!-- Ponto estilizado -->
+    <circle cx="172" cy="40" r="8" fill="currentColor"/>
+    <circle cx="176" cy="36" r="3" fill="currentColor" fill-opacity="0.3"/>
+  </g>
+</svg>
+
