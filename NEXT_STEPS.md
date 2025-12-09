@@ -1,6 +1,28 @@
 # 🚀 Próximos Passos Imediatos - CRM Alma
 
 > Este documento contém as ações práticas para colocar o CRM em funcionamento real.
+> 
+> **Última atualização:** 9 de Dezembro de 2025
+
+---
+
+## ✅ Melhorias de Frontend Concluídas
+
+As seguintes melhorias de UX/UI foram implementadas e não dependem do backend:
+
+| Melhoria | Status |
+|----------|--------|
+| Componentes de Loading Skeleton reutilizáveis | ✅ Concluído |
+| Componentes de Empty State com variantes | ✅ Concluído |
+| Tooltips nos ícones do menu recolhido | ✅ Concluído |
+| Formulário de registro melhorado (campo organização) | ✅ Concluído |
+| Formulários visuais de criação de Contato e Empresa | ✅ Concluído |
+| Modal de criação de Deal no Pipeline | ✅ Concluído |
+| Drawer de detalhes do Deal com abas | ✅ Concluído |
+| Página de Onboarding multi-step | ✅ Concluído |
+| Animações e transições CSS aprimoradas | ✅ Concluído |
+| Removidas dependências não utilizadas (Mantine) | ✅ Concluído |
+| Deletadas pastas legadas (blog-posts, categories) | ✅ Concluído |
 
 ---
 
@@ -57,52 +79,7 @@ import authProvider from "./authProvider";
 
 ---
 
-## 🐛 Bugs Conhecidos para Corrigir
-
-### 1. Formulário de Registro Incompleto
-**Arquivo:** `src/components/refine-ui/form/sign-up-form.tsx`
-
-O formulário atual não tem campo para nome da organização. Adicionar:
-- Campo "Nome da Organização"
-- Lógica para criar organização após registro
-
-### 2. Onboarding Não Implementado
-**Necessário criar:** `src/pages/onboarding/index.tsx`
-
-Quando usuário faz primeiro login sem organização:
-1. Redirecionar para `/onboarding`
-2. Coletar nome da organização
-3. Criar organização e vincular ao usuário
-4. Criar pipeline padrão
-5. Redirecionar para `/dashboard`
-
-### 3. Dados Mockados nas Páginas
-**Arquivos afetados:**
-- `src/pages/dashboard/index.tsx`
-- `src/pages/pipeline/index.tsx`
-- `src/pages/inbox/index.tsx`
-- `src/pages/contacts/list.tsx`
-- `src/pages/companies/list.tsx`
-- `src/pages/tasks/list.tsx`
-
-**Ação:** Substituir dados mockados por queries Supabase usando hooks do Refine.
-
-### 4. Dependências Não Utilizadas
-**Arquivo:** `package.json`
-
-Remover pacotes do Mantine (não estamos usando):
-```bash
-npm uninstall @refinedev/mantine @mantine/core @mantine/form @mantine/hooks @mantine/notifications @emotion/react
-```
-
-### 5. Pastas Legadas
-**Deletar:**
-- `src/pages/blog-posts/`
-- `src/pages/categories/`
-
----
-
-## 📝 Tarefas por Página
+## 📝 Tarefas Restantes por Página
 
 ### Dashboard (`/dashboard`)
 
@@ -121,8 +98,8 @@ npm uninstall @refinedev/mantine @mantine/core @mantine/form @mantine/hooks @man
 | Carregar stages do banco | Alta | 1h |
 | Carregar deals por stage | Alta | 2h |
 | Persistir drag-and-drop | Alta | 2h |
-| Modal de criação de deal | Alta | 3h |
-| Drawer de detalhes do deal | Alta | 4h |
+| ~~Modal de criação de deal~~ | ✅ Concluído | - |
+| ~~Drawer de detalhes do deal~~ | ✅ Concluído | - |
 | Filtros funcionais | Média | 2h |
 
 ### Inbox (`/inbox`)
@@ -143,7 +120,7 @@ npm uninstall @refinedev/mantine @mantine/core @mantine/form @mantine/hooks @man
 | Lista com paginação real | Alta | 2h |
 | Busca funcional | Alta | 1h |
 | Filtros por status/empresa | Alta | 2h |
-| Formulário de criação | Alta | 3h |
+| ~~Formulário de criação visual~~ | ✅ Concluído | - |
 | Formulário de edição | Alta | 2h |
 | Página de detalhes | Alta | 4h |
 
@@ -151,7 +128,8 @@ npm uninstall @refinedev/mantine @mantine/core @mantine/form @mantine/hooks @man
 
 | Tarefa | Prioridade | Estimativa |
 |--------|------------|------------|
-| CRUD completo | Alta | 6h |
+| CRUD com dados reais | Alta | 4h |
+| ~~Formulário de criação visual~~ | ✅ Concluído | - |
 | Lista de contatos da empresa | Média | 2h |
 | Deals da empresa | Média | 2h |
 
@@ -201,7 +179,7 @@ export const ContactList = () => {
 
   if (isLoading) return <ContactListSkeleton />;
   if (isError) return <ErrorState />;
-  if (!data?.data.length) return <EmptyState />;
+  if (!data?.data.length) return <EmptyState variant="contacts" />;
 
   return (
     <div>
@@ -296,18 +274,18 @@ export function useConversationRealtime(conversationId: string, onNewMessage: (m
 ## 🎯 Ordem de Execução Recomendada
 
 ### Dia 1
-1. ✅ Executar migrations no Supabase
-2. ✅ Ativar authProvider real
-3. ✅ Testar registro/login
-4. ⬜ Implementar onboarding
+1. ⬜ Executar migrations no Supabase
+2. ⬜ Ativar authProvider real
+3. ⬜ Testar registro/login
+4. ⬜ Testar página de onboarding
 
 ### Dia 2-3
-5. ⬜ CRUD Contatos completo
-6. ⬜ CRUD Empresas completo
+5. ⬜ CRUD Contatos completo (conectar ao banco)
+6. ⬜ CRUD Empresas completo (conectar ao banco)
 
 ### Dia 4-5
 7. ⬜ Pipeline com dados reais
-8. ⬜ Criar/editar deals
+8. ⬜ Persistir drag-and-drop
 
 ### Dia 6-7
 9. ⬜ Inbox funcional
@@ -315,12 +293,46 @@ export function useConversationRealtime(conversationId: string, onNewMessage: (m
 
 ### Dia 8-9
 11. ⬜ Dashboard com métricas reais
-12. ⬜ Tarefas
+12. ⬜ Tarefas conectadas ao banco
 
 ### Dia 10
-13. ⬜ Configurações
-14. ⬜ Limpeza de código
-15. ⬜ Testes finais
+13. ⬜ Configurações funcionais
+14. ⬜ Testes finais
+15. ⬜ Deploy em produção
+
+---
+
+## 📂 Novos Componentes Criados
+
+### Skeletons (`src/components/alma/skeletons.tsx`)
+
+Componentes disponíveis:
+- `CardSkeleton` - Para cards do dashboard
+- `ChartSkeleton` - Para gráficos
+- `TableSkeleton` - Para tabelas de lista
+- `KanbanSkeleton` - Para o pipeline
+- `ConversationListSkeleton` - Para lista de conversas
+- `MessagesSkeleton` - Para mensagens do inbox
+- `DetailSkeleton` - Para páginas de detalhes
+- `FormSkeleton` - Para formulários
+- `DashboardSkeleton` - Dashboard completo
+
+### Empty States (`src/components/alma/empty-state.tsx`)
+
+Variantes disponíveis:
+- `contacts` - Para lista de contatos vazia
+- `companies` - Para lista de empresas vazia
+- `deals` - Para pipeline vazio
+- `conversations` - Para inbox vazio
+- `tasks` - Para lista de tarefas vazia
+- `search` - Para resultados de busca vazios
+- `error` - Para erros
+- `generic` - Genérico
+
+Componentes especiais:
+- `EmptyStateCompact` - Versão compacta inline
+- `EmptyInbox` - Específico para inbox zerado
+- `EmptyPipeline` - Específico para pipeline vazio
 
 ---
 
@@ -334,4 +346,3 @@ Se encontrar problemas:
 ---
 
 **Boa sorte com a implementação! 🚀**
-

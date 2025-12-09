@@ -1,33 +1,49 @@
 # 🗺️ CRM Alma - Roadmap Completo de Melhorias
 
 > **Documento criado em:** 9 de Dezembro de 2025  
-> **Status atual:** MVP Funcional com dados mockados  
+> **Última atualização:** 9 de Dezembro de 2025  
+> **Status atual:** MVP Frontend Completo - Aguardando integração com Supabase  
 > **Próxima milestone:** Integração completa com Supabase
 
 ---
 
 ## 📊 Status Atual do Projeto
 
-### ✅ Concluído
+### ✅ Concluído - Estrutura Base
 - [x] Estrutura base do projeto (React + Vite + TypeScript)
 - [x] Configuração do Refine com Supabase
 - [x] Tema Alma (dark mode, cores, fonte Manrope)
 - [x] Logo e favicon
 - [x] Layout com Sidebar e Header
-- [x] Páginas principais com dados mockados:
-  - Dashboard com métricas e gráficos
-  - Pipeline Kanban com drag-and-drop
-  - Inbox com layout 3 colunas
-  - Lista de Contatos
-  - Lista de Empresas
-  - Lista de Tarefas
-  - Configurações (Perfil, Organização, Pipeline, Notificações)
 - [x] Schema SQL completo para Supabase (11 tabelas)
 - [x] RLS Policies para multi-tenant
 - [x] AuthProvider para Supabase
 - [x] Modo de desenvolvimento (bypass auth)
 
-### ⚠️ Pendências Críticas
+### ✅ Concluído - Páginas com Dados Mockados
+- [x] Dashboard com métricas e gráficos
+- [x] Pipeline Kanban com drag-and-drop
+- [x] Inbox com layout 3 colunas
+- [x] Lista de Contatos
+- [x] Lista de Empresas
+- [x] Lista de Tarefas
+- [x] Configurações (Perfil, Organização, Pipeline, Notificações)
+
+### ✅ Concluído - Melhorias de UX/UI (Dezembro 2025)
+- [x] Componentes de Loading Skeleton reutilizáveis
+- [x] Componentes de Empty State com variantes
+- [x] Tooltips nos ícones do menu recolhido
+- [x] Formulário de registro melhorado (campo organização)
+- [x] Formulários visuais de criação de Contato
+- [x] Formulários visuais de criação de Empresa
+- [x] Modal de criação de Deal no Pipeline
+- [x] Drawer de detalhes do Deal com abas (Detalhes, Atividades, Notas)
+- [x] Página de Onboarding multi-step
+- [x] Animações e transições CSS aprimoradas
+- [x] Removidas dependências não utilizadas (Mantine, Emotion)
+- [x] Deletadas pastas legadas (blog-posts, categories)
+
+### ⚠️ Pendências Críticas (Dependem do Backend)
 - [ ] Executar migrations no Supabase
 - [ ] Conectar páginas ao banco de dados real
 - [ ] Implementar CRUD real em todas as páginas
@@ -52,15 +68,13 @@
   - `tasks`
 
 ### 1.2 Fluxo de Onboarding
-**Estimativa:** 4-6 horas
+**Estimativa:** 2-3 horas (estrutura visual já criada)
 
-- [ ] Criar página `/onboarding` para novos usuários
+- [x] ~~Criar página `/onboarding` para novos usuários~~
+- [ ] Conectar ao backend para salvar dados
 - [ ] Implementar criação automática de organização no primeiro login
 - [ ] Criar pipeline padrão automaticamente
-- [ ] Adicionar wizard de configuração inicial:
-  - Nome da organização
-  - Configuração do pipeline
-  - Importação de contatos (opcional)
+- [ ] Redirecionar após conclusão
 
 ### 1.3 Autenticação Completa
 **Estimativa:** 3-4 horas
@@ -77,27 +91,22 @@
 ## 🔧 FASE 2: CRUD Completo das Entidades (Prioridade Alta)
 
 ### 2.1 Contatos
-**Estimativa:** 6-8 horas
+**Estimativa:** 4-6 horas (formulários já criados)
 
 **Lista (`/contacts`)**
 - [ ] Conectar `useList` ao Supabase
 - [ ] Implementar paginação real
 - [ ] Implementar busca por nome/email
-- [ ] Filtros funcionais:
-  - Por status (Lead, Prospect, Cliente, Inativo)
-  - Por empresa
-  - Por responsável
-  - Por tags
+- [ ] Filtros funcionais
 - [ ] Ordenação por colunas
 - [ ] Seleção múltipla para ações em lote
 - [ ] Exportar para CSV
 
 **Criar (`/contacts/create`)**
-- [ ] Formulário com validação (Zod + React Hook Form)
-- [ ] Campos: nome, email, telefone, empresa, cargo, tags
+- [x] ~~Formulário visual com validação~~
+- [ ] Conectar ao Supabase
 - [ ] Upload de avatar
 - [ ] Seleção de empresa existente ou criar nova
-- [ ] Atribuir responsável
 
 **Editar (`/contacts/edit/:id`)**
 - [ ] Carregar dados existentes
@@ -110,56 +119,44 @@
 - [ ] Deals relacionados
 - [ ] Conversas relacionadas
 - [ ] Tarefas pendentes
-- [ ] Ações rápidas (ligar, enviar email, criar deal)
 
 ### 2.2 Empresas
-**Estimativa:** 4-6 horas
+**Estimativa:** 3-4 horas (formulários já criados)
 
-- [ ] CRUD completo similar a Contatos
-- [ ] Campos específicos: domínio, website, indústria, tamanho
+- [x] ~~Formulário de criação visual~~
+- [ ] CRUD completo conectado ao Supabase
 - [ ] Lista de contatos da empresa
 - [ ] Deals da empresa
 - [ ] Logo upload
 
 ### 2.3 Deals (Pipeline)
-**Estimativa:** 8-10 horas
+**Estimativa:** 6-8 horas (modal e drawer já criados)
 
 **Kanban (`/pipeline`)**
 - [ ] Carregar stages do banco
 - [ ] Carregar deals por stage
 - [ ] Drag-and-drop funcional com persistência
 - [ ] Atualizar `stage_id` e `moved_at` ao mover
-- [ ] Filtros:
-  - Por pipeline (se houver múltiplos)
-  - Por responsável
-  - Por valor
-  - Por data de fechamento esperada
-- [ ] Ordenação dentro das colunas
+- [ ] Filtros funcionais
 
 **Criar Deal**
-- [ ] Modal ou drawer para criação rápida
-- [ ] Campos: título, valor, contato, empresa, probabilidade
-- [ ] Selecionar stage inicial
-- [ ] Data de fechamento esperada
+- [x] ~~Modal para criação rápida~~
+- [ ] Conectar ao Supabase
 
 **Painel Lateral de Deal**
-- [ ] Informações completas
+- [x] ~~Drawer com abas (Detalhes, Atividades, Notas)~~
+- [ ] Conectar dados reais
 - [ ] Edição inline
 - [ ] Histórico de movimentações
-- [ ] Atividades relacionadas
-- [ ] Contatos relacionados
-- [ ] Arquivos anexados
 - [ ] Marcar como ganho/perdido
 
 ### 2.4 Tarefas
 **Estimativa:** 4-6 horas
 
-- [ ] Lista agrupada por status (A Fazer, Em Progresso, Concluído)
-- [ ] Filtros por data, prioridade, responsável
+- [ ] Lista com dados reais
 - [ ] Criar tarefa vinculada a deal/contato
-- [ ] Lembretes (integração futura com notificações)
 - [ ] Marcar como concluída
-- [ ] Arrastar entre status
+- [ ] Filtros por data/prioridade
 
 ### 2.5 Inbox
 **Estimativa:** 10-12 horas
@@ -167,17 +164,10 @@
 **Lista de Conversas**
 - [ ] Carregar conversas do banco
 - [ ] Filtros por status, canal, prioridade
-- [ ] Busca por assunto/contato
 - [ ] Indicador de não lidas
-- [ ] Ordenação por última mensagem
 
 **Visualização de Conversa**
 - [ ] Carregar mensagens da conversa
-- [ ] Diferenciação visual:
-  - Mensagens do cliente (esquerda)
-  - Mensagens da equipe (direita, cor primária)
-  - Notas internas (fundo amarelo)
-  - Mensagens do sistema (cinza)
 - [ ] Suporte a anexos
 - [ ] Scroll infinito para histórico
 
@@ -185,8 +175,6 @@
 - [ ] Textarea com formatação básica
 - [ ] Botão de nota interna
 - [ ] Upload de anexos
-- [ ] Atalho Cmd/Ctrl + Enter para enviar
-- [ ] Indicador de digitando (futuro)
 
 **Realtime**
 - [ ] Subscription para novas mensagens
@@ -200,16 +188,9 @@
 ### 3.1 Command Palette (Ctrl/Cmd + K)
 **Estimativa:** 4-6 horas
 
-- [ ] Configurar RefineKbar com ações
-- [ ] Busca global por:
-  - Contatos
-  - Empresas
-  - Deals
-  - Conversas
-- [ ] Ações rápidas:
-  - Criar novo contato
-  - Criar novo deal
-  - Ir para página
+- [x] ~~RefineKbar configurado~~
+- [ ] Busca global por Contatos, Empresas, Deals, Conversas
+- [ ] Ações rápidas (criar novo, ir para página)
 - [ ] Atalhos de teclado documentados
 
 ### 3.2 Atalhos de Teclado
@@ -224,22 +205,22 @@
 - [ ] `?` - Mostrar ajuda de atalhos
 
 ### 3.3 Loading States
-**Estimativa:** 2-3 horas
+**Estimativa:** ✅ Concluído
 
-- [ ] Skeletons para listas
-- [ ] Skeletons para cards
-- [ ] Skeletons para formulários
-- [ ] Indicador de loading em botões
-- [ ] Overlay de loading para ações
+- [x] Skeletons para listas
+- [x] Skeletons para cards
+- [x] Skeletons para formulários
+- [x] Skeletons para dashboard
+- [x] Skeletons para kanban
+- [x] Skeletons para inbox
 
 ### 3.4 Empty States
-**Estimativa:** 2-3 horas
+**Estimativa:** ✅ Concluído
 
-- [ ] Ilustrações para estados vazios
-- [ ] CTAs claros:
-  - "Nenhum contato. Criar primeiro contato"
-  - "Nenhum deal. Criar primeiro deal"
-- [ ] Dicas de uso
+- [x] Componente reutilizável com variantes
+- [x] CTAs claros para cada tipo
+- [x] Versão compacta para inline
+- [x] Estados específicos (EmptyInbox, EmptyPipeline)
 
 ### 3.5 Responsividade
 **Estimativa:** 4-6 horas
@@ -362,15 +343,10 @@
 ## 🧹 FASE 7: Limpeza e Otimização
 
 ### 7.1 Código
-**Estimativa:** 4-6 horas
+**Estimativa:** ✅ Parcialmente concluído
 
-- [ ] Remover pastas não utilizadas:
-  - `src/pages/blog-posts/`
-  - `src/pages/categories/`
-- [ ] Remover dependências não utilizadas:
-  - `@refinedev/mantine`
-  - `@mantine/*`
-  - `@emotion/react`
+- [x] Remover pastas não utilizadas (blog-posts, categories)
+- [x] Remover dependências não utilizadas (Mantine, Emotion)
 - [ ] Organizar imports
 - [ ] Adicionar comentários JSDoc
 - [ ] Criar tipos TypeScript para todas as entidades
@@ -431,25 +407,25 @@
 
 ### Sprint 1 (1-2 semanas)
 1. Executar migrations no Supabase
-2. Implementar fluxo de onboarding
-3. CRUD de Contatos completo
+2. Testar página de onboarding
+3. CRUD de Contatos completo (conectar ao banco)
 4. Testar autenticação
 
 ### Sprint 2 (1-2 semanas)
-1. CRUD de Empresas
-2. Pipeline Kanban funcional
-3. Criar/editar deals
+1. CRUD de Empresas (conectar ao banco)
+2. Pipeline Kanban funcional (conectar ao banco)
+3. Persistir drag-and-drop
 
 ### Sprint 3 (1-2 semanas)
 1. Inbox com Realtime
-2. Tarefas
+2. Tarefas conectadas ao banco
 3. Dashboard com dados reais
 
 ### Sprint 4 (1-2 semanas)
-1. Command Palette
-2. Melhorias de UX
+1. Command Palette funcional
+2. Atalhos de teclado
 3. Responsividade
-4. Limpeza de código
+4. Testes finais
 
 ### Futuro
 - Integrações (Email, WhatsApp)
@@ -460,24 +436,17 @@
 
 ## 📝 Notas Técnicas
 
-### Estrutura de Pastas Recomendada
+### Estrutura de Pastas Atual
 
 ```
 src/
 ├── components/
 │   ├── alma/           # Componentes específicos da marca
-│   ├── crm/            # Componentes de negócio (DealCard, ContactRow, etc)
+│   │   ├── logo.tsx
+│   │   ├── skeletons.tsx    # ✅ Novo
+│   │   └── empty-state.tsx  # ✅ Novo
 │   ├── refine-ui/      # Componentes do Refine customizados
 │   └── ui/             # Shadcn UI components
-├── hooks/
-│   ├── useContacts.ts
-│   ├── useDeals.ts
-│   ├── useConversations.ts
-│   └── useRealtime.ts
-├── lib/
-│   ├── supabase.ts     # Cliente Supabase
-│   ├── utils.ts        # Utilitários
-│   └── constants.ts    # Constantes
 ├── pages/
 │   ├── contacts/
 │   ├── companies/
@@ -485,13 +454,10 @@ src/
 │   ├── inbox/
 │   ├── tasks/
 │   ├── dashboard/
-│   └── settings/
-├── providers/
-│   ├── auth-provider.ts
-│   └── organization-provider.tsx  # Context para org atual
-├── types/
-│   ├── database.ts     # Tipos gerados do Supabase
-│   └── index.ts
+│   ├── settings/
+│   └── onboarding/     # ✅ Novo
+├── authProvider.ts     # Auth real
+├── authProvider.dev.ts # Auth desenvolvimento
 └── App.tsx
 ```
 
@@ -524,5 +490,18 @@ Para contribuir com o projeto:
 
 ---
 
-**Última atualização:** 9 de Dezembro de 2025
+## 📈 Progresso Geral
 
+| Fase | Status | Progresso |
+|------|--------|-----------|
+| Estrutura Base | ✅ Concluído | 100% |
+| Melhorias UX/UI | ✅ Concluído | 100% |
+| Integração Supabase | ⏳ Pendente | 0% |
+| CRUD Entidades | ⏳ Pendente | 20% (formulários prontos) |
+| Dashboard Avançado | ⏳ Pendente | 0% |
+| Integrações | ⏳ Futuro | 0% |
+| IA e Análises | ⏳ Futuro | 0% |
+
+---
+
+**Última atualização:** 9 de Dezembro de 2025
